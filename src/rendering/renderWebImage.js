@@ -1,5 +1,6 @@
 import setToPixelCoordinateSystem from '../setToPixelCoordinateSystem.js';
 import { renderColorImage } from './renderColorImage.js';
+import { renderPseudoColorImage } from './renderPseudoColorImage.js';
 
 /**
  * API function to draw a standard web image (PNG, JPG) to an enabledImage
@@ -20,9 +21,12 @@ export function renderWebImage (enabledElement, invalidated) {
     throw new Error('renderWebImage: image must be loaded before it can be drawn');
   }
 
+  if (enabledElement.viewport.colormap && enabledElement.viewport.colormap !== '') {
+    renderPseudoColorImage(enabledElement, invalidated);
+
   // If the viewport ww/wc and invert all match the initial state of the image, we can draw the image
   // Directly. If any of those are changed, we call renderColorImage() to apply the lut
-  if (enabledElement.viewport.voi.windowWidth === enabledElement.image.windowWidth &&
+  } else if (enabledElement.viewport.voi.windowWidth === enabledElement.image.windowWidth &&
         enabledElement.viewport.voi.windowCenter === enabledElement.image.windowCenter &&
         enabledElement.viewport.invert === false) {
 

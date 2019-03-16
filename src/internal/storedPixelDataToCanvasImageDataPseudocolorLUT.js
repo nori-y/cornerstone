@@ -13,8 +13,12 @@ import now from './now.js';
  */
 function storedPixelDataToCanvasImageDataPseudocolorLUT (image, grayscaleLut, colorLut, canvasImageDataData) {
   let start = now();
-  const pixelData = image.getPixelData();
 
+  // use intensity data if it was defined
+  const pixelData = typeof image.getIntensityData === 'function'
+    ? image.getIntensityData()
+    : image.getPixelData();
+  
   image.stats.lastGetPixelDataTime = now() - start;
 
   const numPixels = pixelData.length;
