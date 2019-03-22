@@ -431,13 +431,18 @@ class LookupTable {
 
     this.Table[index] = rgba;
 
-    if ((index === 0) || (index === this.NumberOfColors - 1)) {
-      // This is needed due to the way the special colors are stored in
-      // The internal table. If Above/BelowRangeColors are not used and
-      // The min/max colors are changed in the table with this member
-      // Function, then the colors used for values outside the range may
-      // Be incorrect. Calling this here ensures the out-of-range colors
-      // Are set correctly.
+    // This is needed due to the way the special colors are stored in
+    // The internal table. If Above/BelowRangeColors are not used and
+    // The min/max colors are changed in the table with this member
+    // Function, then the colors used for values outside the range may
+    // Be incorrect. Calling this here ensures the out-of-range colors
+    // Are set correctly.
+    if (index === 0) {
+      this.BelowRangeColor = rgba;
+      this.buildSpecialColors();
+
+    } else if (index === this.NumberOfColors - 1) {
+      this.AboveRangeColor = rgba;
       this.buildSpecialColors();
     }
   }
