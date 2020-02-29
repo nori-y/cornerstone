@@ -33,10 +33,20 @@ function storedPixelDataToCanvasImageDataPseudocolorLUT (image, grayscaleLut, co
     clut = colorLut;
   }
 
+  const isPadding = typeof image.pixelPaddingValue !== 'undefined';
+
   if (minPixelValue < 0) {
     while (storedPixelDataIndex < numPixels) {
-      grayscale = grayscaleLut[pixelData[storedPixelDataIndex++] + (-minPixelValue)];
-      rgba = clut[grayscale];
+      const pixel = pixelData[storedPixelDataIndex++];
+
+      if (isPadding && pixel === image.pixelPaddingValue) {
+        rgba = [0, 0, 0, 255];
+
+      } else {
+        grayscale = grayscaleLut[pixel + (-minPixelValue)];
+        rgba = clut[grayscale];
+      }
+
       canvasImageDataData[canvasImageDataIndex++] = rgba[0];
       canvasImageDataData[canvasImageDataIndex++] = rgba[1];
       canvasImageDataData[canvasImageDataIndex++] = rgba[2];
@@ -44,8 +54,16 @@ function storedPixelDataToCanvasImageDataPseudocolorLUT (image, grayscaleLut, co
     }
   } else {
     while (storedPixelDataIndex < numPixels) {
-      grayscale = grayscaleLut[pixelData[storedPixelDataIndex++]];
-      rgba = clut[grayscale];
+      const pixel = pixelData[storedPixelDataIndex++];
+
+      if (isPadding && pixel === image.pixelPaddingValue) {
+        rgba = [0, 0, 0, 255];
+
+      } else {
+        grayscale = grayscaleLut[pixel];
+        rgba = clut[grayscale];
+      }
+
       canvasImageDataData[canvasImageDataIndex++] = rgba[0];
       canvasImageDataData[canvasImageDataIndex++] = rgba[1];
       canvasImageDataData[canvasImageDataIndex++] = rgba[2];
